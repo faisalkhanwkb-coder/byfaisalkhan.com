@@ -40,7 +40,7 @@ button{width:100%;min-height:54px;border:0;border-radius:999px;background:var(--
 button:hover{opacity:.93}
 .foot{margin-top:18px;font-size:12px;color:var(--mid);text-align:center}
 .event-block{border-top:1px solid var(--line);padding-top:14px;margin-top:8px}
-.event-block:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.event-block[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -93,24 +93,27 @@ button:hover{opacity:.93}
 
       <div class="card">
         <h2>2. Which events?</h2>
-        <p class="hint">Tick all that apply. Add details below for each.</p>
+        <p class="hint">Tick all that apply. Details for each ticked event appear in step 3.</p>
         <div class="checks">
           <label><input type="checkbox" name="has_mehndi" value="yes"> Mehndi / Mayoun</label>
           <label><input type="checkbox" name="has_nikkah" value="yes"> Nikkah</label>
           <label><input type="checkbox" name="has_baraat" value="yes"> Baraat</label>
           <label><input type="checkbox" name="has_valima" value="yes"> Valima / Walima</label>
+          <label><input type="checkbox" name="has_engagement" value="yes"> Engagement</label>
+          <label><input type="checkbox" name="has_home_reception" value="yes"> Home reception</label>
           <label><input type="checkbox" name="has_couple_shoot" value="yes"> Couple shoot</label>
           <label><input type="checkbox" name="has_other" value="yes"> Other</label>
         </div>
         <label for="other_event_name">If other, what is it?</label>
-        <input id="other_event_name" name="other_event_name" placeholder="e.g. Engagement, Home reception">
+        <input id="other_event_name" name="other_event_name" placeholder="e.g. Dholki, Bridal shower">
       </div>
 
       <div class="card">
         <h2>3. Event details</h2>
-        <p class="hint">Fill only the events you’re booking with us.</p>
+        <p class="hint">Showing only the events you ticked in step 2.</p>
+        <p id="no-events-msg" class="hint" style="font-style:italic">No events ticked yet — please go back to step 2 and tick the events you’re booking with us.</p>
 
-        <div class="event-block">
+        <div class="event-block" data-event="has_mehndi" hidden>
           <h2 style="font-size:20px">Mehndi / Mayoun</h2>
           <div class="row two">
             <div><label for="mehndi_date">Date</label><input id="mehndi_date" name="mehndi_date" type="date"></div>
@@ -120,7 +123,7 @@ button:hover{opacity:.93}
           <textarea id="mehndi_venue" name="mehndi_venue" placeholder="Name + address"></textarea>
         </div>
 
-        <div class="event-block">
+        <div class="event-block" data-event="has_nikkah" hidden>
           <h2 style="font-size:20px">Nikkah</h2>
           <div class="row two">
             <div><label for="nikkah_date">Date</label><input id="nikkah_date" name="nikkah_date" type="date"></div>
@@ -130,7 +133,7 @@ button:hover{opacity:.93}
           <textarea id="nikkah_venue" name="nikkah_venue" placeholder="Name + address"></textarea>
         </div>
 
-        <div class="event-block">
+        <div class="event-block" data-event="has_baraat" hidden>
           <h2 style="font-size:20px">Baraat</h2>
           <div class="row two">
             <div><label for="baraat_date">Date</label><input id="baraat_date" name="baraat_date" type="date"></div>
@@ -140,7 +143,7 @@ button:hover{opacity:.93}
           <textarea id="baraat_venue" name="baraat_venue" placeholder="Name + address"></textarea>
         </div>
 
-        <div class="event-block">
+        <div class="event-block" data-event="has_valima" hidden>
           <h2 style="font-size:20px">Valima / Walima</h2>
           <div class="row two">
             <div><label for="valima_date">Date</label><input id="valima_date" name="valima_date" type="date"></div>
@@ -149,23 +152,52 @@ button:hover{opacity:.93}
           <label for="valima_venue">Venue</label>
           <textarea id="valima_venue" name="valima_venue" placeholder="Name + address"></textarea>
         </div>
-      </div>
 
-      <div class="card">
-        <h2>4. Couple shoot</h2>
-        <p class="hint">Skip if not in your package.</p>
-        <div class="row two">
-          <div><label for="cs_date">Preferred date</label><input id="cs_date" name="cs_date" type="date"></div>
-          <div><label for="cs_time">Preferred window</label><input id="cs_time" name="cs_time" placeholder="e.g. 4:00 – 6:00 PM"></div>
+        <div class="event-block" data-event="has_engagement" hidden>
+          <h2 style="font-size:20px">Engagement</h2>
+          <div class="row two">
+            <div><label for="engagement_date">Date</label><input id="engagement_date" name="engagement_date" type="date"></div>
+            <div><label for="engagement_time">Start – end</label><input id="engagement_time" name="engagement_time" placeholder="e.g. 7:00 PM – 11:00 PM"></div>
+          </div>
+          <label for="engagement_venue">Venue</label>
+          <textarea id="engagement_venue" name="engagement_venue" placeholder="Name + address"></textarea>
         </div>
-        <label for="cs_venue">Location</label>
-        <textarea id="cs_venue" name="cs_venue" placeholder="Venue / outdoor spot"></textarea>
-        <label for="cs_notes">Must-have shots (optional)</label>
-        <textarea id="cs_notes" name="cs_notes" placeholder="Anything you especially want"></textarea>
+
+        <div class="event-block" data-event="has_home_reception" hidden>
+          <h2 style="font-size:20px">Home reception</h2>
+          <div class="row two">
+            <div><label for="home_reception_date">Date</label><input id="home_reception_date" name="home_reception_date" type="date"></div>
+            <div><label for="home_reception_time">Start – end</label><input id="home_reception_time" name="home_reception_time" placeholder="e.g. 1:00 PM – 5:00 PM"></div>
+          </div>
+          <label for="home_reception_venue">Venue</label>
+          <textarea id="home_reception_venue" name="home_reception_venue" placeholder="Name + address"></textarea>
+        </div>
+
+        <div class="event-block" data-event="has_couple_shoot" hidden>
+          <h2 style="font-size:20px">Couple shoot</h2>
+          <div class="row two">
+            <div><label for="cs_date">Preferred date</label><input id="cs_date" name="cs_date" type="date"></div>
+            <div><label for="cs_time">Preferred window</label><input id="cs_time" name="cs_time" placeholder="e.g. 4:00 – 6:00 PM"></div>
+          </div>
+          <label for="cs_venue">Location</label>
+          <textarea id="cs_venue" name="cs_venue" placeholder="Venue / outdoor spot"></textarea>
+          <label for="cs_notes">Must-have shots (optional)</label>
+          <textarea id="cs_notes" name="cs_notes" placeholder="Anything you especially want"></textarea>
+        </div>
+
+        <div class="event-block" data-event="has_other" hidden>
+          <h2 style="font-size:20px">Other event</h2>
+          <div class="row two">
+            <div><label for="other_date">Date</label><input id="other_date" name="other_date" type="date"></div>
+            <div><label for="other_time">Start – end</label><input id="other_time" name="other_time" placeholder="e.g. 6:00 PM – 10:00 PM"></div>
+          </div>
+          <label for="other_venue">Venue</label>
+          <textarea id="other_venue" name="other_venue" placeholder="Name + address"></textarea>
+        </div>
       </div>
 
       <div class="card">
-        <h2>5. Coverage notes</h2>
+        <h2>4. Coverage notes</h2>
         <label for="traditions">Traditions to cover</label>
         <textarea id="traditions" name="traditions" placeholder="Sehra, rukhsati, milni, cake, etc."></textarea>
         <label for="no_photo">No-photo zones / privacy</label>
@@ -194,7 +226,7 @@ button:hover{opacity:.93}
       </div>
 
       <div class="card">
-        <h2>6. Delivery & social</h2>
+        <h2>5. Delivery & social</h2>
         <label for="album_names">Names for album (exact spelling)</label>
         <input id="album_names" name="album_names" placeholder="How names should appear">
         <p class="hint" style="margin-top:4px">Social media consent *</p>
@@ -208,7 +240,7 @@ button:hover{opacity:.93}
       </div>
 
       <div class="card">
-        <h2>7. Day-of logistics</h2>
+        <h2>6. Day-of logistics</h2>
         <label for="day_contact">Point person on the day *</label>
         <input id="day_contact" name="day_contact" required placeholder="Name + WhatsApp">
         <label for="guests">Approx. guests (optional)</label>
@@ -229,6 +261,27 @@ button:hover{opacity:.93}
 (function(){
   var form = document.getElementById('bfk-intake');
   if(!form) return;
+  // Step 3: show only detail blocks for events ticked in step 2.
+  // Hidden blocks are disabled (so validation + FormData skip them); required is restored when shown.
+  var blocks = form.querySelectorAll('.event-block[data-event]');
+  var noMsg = document.getElementById('no-events-msg');
+  function syncEvents(){
+    var any = false;
+    blocks.forEach(function(b){
+      var cb = form.querySelector('input[type="checkbox"][name="'+b.getAttribute('data-event')+'"]');
+      var on = !!(cb && cb.checked);
+      if(on) any = true;
+      b.hidden = !on;
+      b.querySelectorAll('input,textarea,select').forEach(function(f){
+        if(f.hasAttribute('required')) f.setAttribute('data-required','1');
+        if(on){ f.disabled = false; if(f.getAttribute('data-required')) f.required = true; }
+        else { f.disabled = true; f.required = false; }
+      });
+    });
+    if(noMsg) noMsg.hidden = any;
+  }
+  form.querySelectorAll('.checks input[type="checkbox"]').forEach(function(cb){ cb.addEventListener('change', syncEvents); });
+  syncEvents();
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     var btn = form.querySelector('button[type="submit"]');
