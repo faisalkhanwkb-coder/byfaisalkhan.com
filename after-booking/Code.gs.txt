@@ -1,0 +1,233 @@
+/**
+ * BFK Ops — receives after-booking form POSTs and writes to this spreadsheet.
+ * Deploy: Deploy → New deployment → Web app
+ * Execute as: Me
+ * Who has access: Anyone
+ * Then paste the Web App URL into after-booking/config.js on the site.
+ */
+
+var SHEET_INTAKE = '04 · Client Intake';
+var SHEET_CEO = '01 · CEO Money';
+var SHEET_TEAM = '02 · Team Schedule';
+var SHEET_EVENTS = '03 · Events Detail';
+
+function doPost(e) {
+  try {
+    var data = parseIncoming_(e);
+    var result = processBooking_(data);
+    return json_({ ok: true, bookingId: result.bookingId, events: result.eventCount });
+  } catch (err) {
+    return json_({ ok: false, error: String(err) });
+  }
+}
+
+/** Browser sends text/plain JSON (CORS). Netlify Forms webhooks nest fields under data. */
+function parseIncoming_(e) {
+  var data = {};
+  if (e && e.postData && e.postData.contents) {
+    try {
+      data = JSON.parse(e.postData.contents);
+    } catch (err) {
+      data = {};
+    }
+  }
+  if ((!data || !Object.keys(data).length) && e && e.parameter) {
+    data = e.parameter;
+  }
+  // Netlify Forms outgoing webhook: { data: { field: value, ... }, ... }
+  if (data && data.data && typeof data.data === 'object' && !data.couple_name) {
+    data = data.data;
+  }
+  return data || {};
+}
+
+function doGet() {
+  return json_({ ok: true, service: 'BFK after-booking intake', ts: new Date().toISOString() });
+}
+
+function json_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function processBooking_(d) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureSheets_(ss);
+
+  var bookingId = nextBookingId_(ss);
+  var couple = clean_(d.couple_name);
+  var city = clean_(d.city);
+  var whatsapp = clean_(d.whatsapp);
+  var consent = clean_(d.social_consent) || 'Ask First';
+  var packageRef = clean_(d.package_ref);
+  var point = clean_(d.point_name);
+  var dayContact = clean_(d.day_contact);
+  var submitted = new Date();
+
+  var eventsTicked = [];
+  if (isYes_(d.has_mehndi)) eventsTicked.push('Mehndi');
+  if (isYes_(d.has_nikkah)) eventsTicked.push('Nikkah');
+  if (isYes_(d.has_baraat)) eventsTicked.push('Baraat');
+  if (isYes_(d.has_valima)) eventsTicked.push('Valima');
+  if (isYes_(d.has_couple_shoot)) eventsTicked.push('Couple Shoot');
+  if (isYes_(d.has_other)) eventsTicked.push(clean_(d.other_event_name) || 'Other');
+
+  var keyVenues = summarizeVenues_(d);
+
+  // Intake raw row
+  appendRow_(ss.getSheetByName(SHEET_INTAKE), [
+    submitted, point, whatsapp, couple, city, eventsTicked.join(', '),
+    keyVenues, consent, dayContact, packageRef, 'Yes', 'Yes'
+  ]);
+
+  // CEO money row (prices blank — you fill; package name from client optional)
+  appendRow_(ss.getSheetByName(SHEET_CEO), [
+    bookingId, couple, city, whatsapp, packageRef, '', '', '', '', '', '',
+    'Deposit paid', consent, 'Yes',
+    'From after-booking · point: ' + point + (d.other_details ? ' · ' + clean_(d.other_details) : '')
+  ]);
+
+  var eventCount = 0;
+  eventCount += maybeEvent_(ss, bookingId, couple, 'Mehndi', d.mehndi_date, d.mehndi_time, d.mehndi_venue, d);
+  eventCount += maybeEvent_(ss, bookingId, couple, 'Nikkah', d.nikkah_date, d.nikkah_time, d.nikkah_venue, d);
+  eventCount += maybeEvent_(ss, bookingId, couple, 'Baraat', d.baraat_date, d.baraat_time, d.baraat_venue, d);
+  eventCount += maybeEvent_(ss, bookingId, couple, 'Valima', d.valima_date, d.valima_time, d.valima_venue, d);
+
+  if (isYes_(d.has_couple_shoot) || clean_(d.cs_date) || clean_(d.cs_venue)) {
+    // Couple shoot as its own event row + team schedule
+    var csDate = parseDate_(d.cs_date);
+    var csTimes = splitTime_(d.cs_time);
+    appendRow_(ss.getSheetByName(SHEET_EVENTS), [
+      bookingId, couple, 'Couple Shoot', csDate, clean_(d.cs_venue), csTimes[0], csTimes[1],
+      clean_(d.cs_venue), csTimes[0], csTimes[1], '', '', '', '', '', 'Pending', 'Pending',
+      clean_(d.cs_notes)
+    ]);
+    appendRow_(ss.getSheetByName(SHEET_TEAM), [
+      csDate, weekday_(csDate), couple, 'Couple Shoot', clean_(d.cs_venue),
+      csTimes[0], csTimes[1], '', '', clean_(d.cs_notes)
+    ]);
+    eventCount++;
+  }
+
+  if (isYes_(d.has_other) && clean_(d.other_event_name)) {
+    appendRow_(ss.getSheetByName(SHEET_EVENTS), [
+      bookingId, couple, clean_(d.other_event_name), '', '', '', '', '', '', '', '', '', '', '', '', 'Pending', 'Pending', ''
+    ]);
+    eventCount++;
+  }
+
+  return { bookingId: bookingId, eventCount: eventCount };
+}
+
+function maybeEvent_(ss, bookingId, couple, type, dateStr, timeStr, venue, d) {
+  if (!clean_(dateStr) && !clean_(venue) && !clean_(timeStr)) return 0;
+  var dt = parseDate_(dateStr);
+  var times = splitTime_(timeStr);
+  var notes = [];
+  if (clean_(d.traditions)) notes.push('Traditions: ' + clean_(d.traditions));
+  if (clean_(d.no_photo)) notes.push('No-photo: ' + clean_(d.no_photo));
+  if (clean_(d.drone)) notes.push('Drone: ' + clean_(d.drone));
+  if (clean_(d.access)) notes.push('Access: ' + clean_(d.access));
+
+  appendRow_(ss.getSheetByName(SHEET_EVENTS), [
+    bookingId, couple, type, dt, clean_(venue), times[0], times[1],
+    '', '', '', '', '', '', '', '', 'Pending', 'Pending', notes.join(' · ')
+  ]);
+  appendRow_(ss.getSheetByName(SHEET_TEAM), [
+    dt, weekday_(dt), couple, type, clean_(venue), times[0], times[1], '', '', notes.join(' · ')
+  ]);
+  return 1;
+}
+
+function summarizeVenues_(d) {
+  var parts = [];
+  function add(label, dateStr, timeStr, venue) {
+    if (!clean_(dateStr) && !clean_(venue)) return;
+    parts.push(label + ': ' + clean_(dateStr) + ' ' + clean_(timeStr) + ' @ ' + clean_(venue));
+  }
+  add('Mehndi', d.mehndi_date, d.mehndi_time, d.mehndi_venue);
+  add('Nikkah', d.nikkah_date, d.nikkah_time, d.nikkah_venue);
+  add('Baraat', d.baraat_date, d.baraat_time, d.baraat_venue);
+  add('Valima', d.valima_date, d.valima_time, d.valima_venue);
+  add('CS', d.cs_date, d.cs_time, d.cs_venue);
+  return parts.join(' | ');
+}
+
+function nextBookingId_(ss) {
+  var sh = ss.getSheetByName(SHEET_CEO);
+  var year = new Date().getFullYear();
+  var last = sh.getLastRow();
+  var n = 1;
+  if (last >= 3) {
+    var vals = sh.getRange(3, 1, last - 2, 1).getValues();
+    for (var i = 0; i < vals.length; i++) {
+      var id = String(vals[i][0] || '');
+      var m = id.match(/B-(\d{4})-(\d+)/);
+      if (m && Number(m[1]) === year) n = Math.max(n, Number(m[2]) + 1);
+    }
+  }
+  return 'B-' + year + '-' + ('000' + n).slice(-3);
+}
+
+function ensureSheets_(ss) {
+  ensureSheet_(ss, SHEET_CEO, [
+    'Booking ID','Couple','City','WhatsApp','Package','Pkg Price (PKR)','Add-ons (PKR)','Discount (PKR)','Final (PKR)','Advance Paid','Balance Due','Payment Status','Social Consent','After-booking done?','Notes'
+  ]);
+  ensureSheet_(ss, SHEET_TEAM, [
+    'Date','Day','Couple','Event','Venue','Call time','End','Photo team','Video team','Notes for crew'
+  ]);
+  ensureSheet_(ss, SHEET_EVENTS, [
+    'Booking ID','Couple','Event Type','Date','Venue','Start','End','CS Venue','CS Start','CS End','Photo team','Video team','# Cameras','Album editor','Video editor','Album status','Video status','Internal notes'
+  ]);
+  ensureSheet_(ss, SHEET_INTAKE, [
+    'Submitted','Point person','WhatsApp','Couple','City','Events ticked','Key dates/venues','Social consent','Day contact','Package ref','Copied to CEO?','Copied to Events?'
+  ]);
+}
+
+function ensureSheet_(ss, name, headers) {
+  var sh = ss.getSheetByName(name);
+  if (!sh) {
+    sh = ss.insertSheet(name);
+    sh.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sh.setFrozenRows(1);
+  } else if (sh.getLastRow() === 0) {
+    sh.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+function appendRow_(sh, row) {
+  sh.appendRow(row.map(function (v) { return v === null || v === undefined ? '' : v; }));
+}
+
+function clean_(v) {
+  return String(v == null ? '' : v).trim();
+}
+function isYes_(v) {
+  var s = clean_(v).toLowerCase();
+  return s === 'yes' || s === 'true' || s === 'on' || s === '1';
+}
+function splitTime_(t) {
+  var s = clean_(t);
+  if (!s) return ['', ''];
+  var parts = s.split(/\s*[–—-]\s*/);
+  if (parts.length >= 2) return [parts[0].trim(), parts[1].trim()];
+  return [s, ''];
+}
+function parseDate_(v) {
+  var s = clean_(v);
+  if (!s) return '';
+  var d = new Date(s);
+  if (!isNaN(d.getTime())) return d;
+  return s;
+}
+function weekday_(d) {
+  if (!(d instanceof Date) || isNaN(d.getTime())) return '';
+  return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+}
+
+/** Run once from the script editor to create tabs on a blank spreadsheet. */
+function setupBFKOpsSheets() {
+  ensureSheets_(SpreadsheetApp.getActiveSpreadsheet());
+}

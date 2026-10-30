@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect Sheets | BFK</title>
+<meta name="robots" content="noindex">
+<style>
+body{font-family:system-ui,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.5;color:#2F2B27;background:#F2ECE5}
+code,pre{background:#fff;border:1px solid #ddd;border-radius:8px;padding:2px 6px}
+pre{padding:14px;overflow:auto;white-space:pre-wrap}
+a{color:#A8742F}
+</style>
+</head>
+<body>
+<h1>Connect after-booking → Google Sheets</h1>
+<p>One-time setup. After this, every client submit writes into your ops workbook automatically.</p>
+<ol>
+  <li>Upload <a href="/BFK-Ops-Workbook.xlsx">BFK-Ops-Workbook.xlsx</a> to Google Drive → Open with Google Sheets.</li>
+  <li>In that Sheet: <strong>Extensions → Apps Script</strong>.</li>
+  <li>Delete any code in <code>Code.gs</code>, paste the script from <a href="/after-booking/Code.gs.txt">Code.gs.txt</a>, Save.</li>
+  <li>Run <code>setupBFKOpsSheets</code> once (Approve permissions).</li>
+  <li><strong>Deploy → New deployment → Web app</strong><br>
+      Execute as: <strong>Me</strong><br>
+      Who has access: <strong>Anyone</strong><br>
+      Deploy → copy the Web App URL.</li>
+  <li>WhatsApp that URL to Chief of Staff / paste into site config — or edit <code>after-booking/config.js</code> on the site.</li>
+</ol>
+<p>Test: open <a href="/after-booking/">/after-booking/</a>, submit a fake booking, check CEO Money + Team Schedule + Events Detail tabs.</p>
+</body>
+</html>

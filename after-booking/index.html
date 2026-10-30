@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>After Booking | BFK by Faisal Khan</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Post-booking details for your BFK wedding coverage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&family=Italiana&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F2ECE5; --paper:#FBF8F4; --ink:#2F2B27; --mid:#6A6058;
+  --brown:#4E4038; --line:rgba(47,43,39,.18); --gold:#A8742F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.55;font-weight:300}
+.wrap{max-width:680px;margin:0 auto;padding:40px 20px 96px}
+.brand{text-align:center;margin-bottom:28px}
+.brand .mark{font-family:Italiana,serif;font-size:42px;letter-spacing:.12em;color:var(--gold)}
+.brand .sub{font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:6px;color:var(--mid)}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:36px;line-height:1.15;margin:8px 0 10px;text-align:center}
+.lead{text-align:center;color:var(--mid);margin:0 auto 28px;max-width:42ch}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin-bottom:16px}
+.card h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:24px;margin-bottom:6px}
+.card .hint{font-size:13px;color:var(--mid);margin-bottom:16px}
+label{display:block;font-size:13px;font-weight:500;color:var(--mid);margin:0 0 6px}
+input,select,textarea{width:100%;min-height:48px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;margin-bottom:14px;color:var(--ink)}
+textarea{min-height:96px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr;gap:0 12px}
+@media(min-width:640px){.row.two{grid-template-columns:1fr 1fr}}
+.checks{display:flex;flex-wrap:wrap;gap:8px 14px;margin-bottom:14px}
+.checks label{display:flex;align-items:center;gap:8px;font-weight:400;color:var(--ink);margin:0}
+.checks input{width:auto;min-height:0;margin:0}
+.consent{display:grid;gap:8px;margin-bottom:14px}
+.consent label{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;margin:0;font-weight:400;color:var(--ink);cursor:pointer}
+.consent input{width:auto;min-height:0;margin-top:3px}
+button{width:100%;min-height:54px;border:0;border-radius:999px;background:var(--brown);color:var(--cream);font-weight:500;font-size:15px;letter-spacing:.04em;cursor:pointer;margin-top:8px}
+button:hover{opacity:.93}
+.foot{margin-top:18px;font-size:12px;color:var(--mid);text-align:center}
+.event-block{border-top:1px solid var(--line);padding-top:14px;margin-top:8px}
+.event-block:first-of-type{border-top:0;padding-top:0;margin-top:0}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark">bfk.</div>
+      <div class="sub">By Faisal Khan</div>
+    </div>
+    <h1>After booking details</h1>
+    <p class="lead">Thanks for booking with us. Fill this once advance is paid — it helps us prepare your day. Only our team sees this.</p>
+
+    <form id="bfk-intake" name="after-booking" method="POST" action="/after-booking/thanks.html">
+      <input type="hidden" name="form-name" value="after-booking">
+      <p style="display:none"><label>Don’t fill this <input name="bot-field"></label></p>
+
+      <div class="card">
+        <h2>1. Who</h2>
+        <p class="hint">Point person we should WhatsApp for planning.</p>
+        <div class="row two">
+          <div>
+            <label for="point_name">Your name *</label>
+            <input id="point_name" name="point_name" required placeholder="e.g. Ayesha">
+          </div>
+          <div>
+            <label for="whatsapp">WhatsApp number *</label>
+            <input id="whatsapp" name="whatsapp" required placeholder="+92 3…">
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label for="couple_name">Couple’s full names *</label>
+            <input id="couple_name" name="couple_name" required placeholder="e.g. Ayesha & Bilal">
+          </div>
+          <div>
+            <label for="city">City *</label>
+            <input id="city" name="city" required placeholder="e.g. Lahore">
+          </div>
+        </div>
+        <div class="row two">
+          <div>
+            <label for="secondary_contact">Secondary contact (optional)</label>
+            <input id="secondary_contact" name="secondary_contact" placeholder="Name + number">
+          </div>
+          <div>
+            <label for="package_ref">Package booked (optional)</label>
+            <input id="package_ref" name="package_ref" placeholder="e.g. Signature — we’ll confirm from our side">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2. Which events?</h2>
+        <p class="hint">Tick all that apply. Add details below for each.</p>
+        <div class="checks">
+          <label><input type="checkbox" name="has_mehndi" value="yes"> Mehndi / Mayoun</label>
+          <label><input type="checkbox" name="has_nikkah" value="yes"> Nikkah</label>
+          <label><input type="checkbox" name="has_baraat" value="yes"> Baraat</label>
+          <label><input type="checkbox" name="has_valima" value="yes"> Valima / Walima</label>
+          <label><input type="checkbox" name="has_couple_shoot" value="yes"> Couple shoot</label>
+          <label><input type="checkbox" name="has_other" value="yes"> Other</label>
+        </div>
+        <label for="other_event_name">If other, what is it?</label>
+        <input id="other_event_name" name="other_event_name" placeholder="e.g. Engagement, Home reception">
+      </div>
+
+      <div class="card">
+        <h2>3. Event details</h2>
+        <p class="hint">Fill only the events you’re booking with us.</p>
+
+        <div class="event-block">
+          <h2 style="font-size:20px">Mehndi / Mayoun</h2>
+          <div class="row two">
+            <div><label for="mehndi_date">Date</label><input id="mehndi_date" name="mehndi_date" type="date"></div>
+            <div><label for="mehndi_time">Start – end</label><input id="mehndi_time" name="mehndi_time" placeholder="e.g. 6:00 PM – 11:00 PM"></div>
+          </div>
+          <label for="mehndi_venue">Venue</label>
+          <textarea id="mehndi_venue" name="mehndi_venue" placeholder="Name + address"></textarea>
+        </div>
+
+        <div class="event-block">
+          <h2 style="font-size:20px">Nikkah</h2>
+          <div class="row two">
+            <div><label for="nikkah_date">Date</label><input id="nikkah_date" name="nikkah_date" type="date"></div>
+            <div><label for="nikkah_time">Start – end</label><input id="nikkah_time" name="nikkah_time" placeholder="e.g. 12:00 PM – 2:00 PM"></div>
+          </div>
+          <label for="nikkah_venue">Venue</label>
+          <textarea id="nikkah_venue" name="nikkah_venue" placeholder="Name + address"></textarea>
+        </div>
+
+        <div class="event-block">
+          <h2 style="font-size:20px">Baraat</h2>
+          <div class="row two">
+            <div><label for="baraat_date">Date</label><input id="baraat_date" name="baraat_date" type="date"></div>
+            <div><label for="baraat_time">Start – end</label><input id="baraat_time" name="baraat_time" placeholder="e.g. 4:00 PM – 10:00 PM"></div>
+          </div>
+          <label for="baraat_venue">Venue</label>
+          <textarea id="baraat_venue" name="baraat_venue" placeholder="Name + address"></textarea>
+        </div>
+
+        <div class="event-block">
+          <h2 style="font-size:20px">Valima / Walima</h2>
+          <div class="row two">
+            <div><label for="valima_date">Date</label><input id="valima_date" name="valima_date" type="date"></div>
+            <div><label for="valima_time">Start – end</label><input id="valima_time" name="valima_time" placeholder="e.g. 7:00 PM – 12:00 AM"></div>
+          </div>
+          <label for="valima_venue">Venue</label>
+          <textarea id="valima_venue" name="valima_venue" placeholder="Name + address"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>4. Couple shoot</h2>
+        <p class="hint">Skip if not in your package.</p>
+        <div class="row two">
+          <div><label for="cs_date">Preferred date</label><input id="cs_date" name="cs_date" type="date"></div>
+          <div><label for="cs_time">Preferred window</label><input id="cs_time" name="cs_time" placeholder="e.g. 4:00 – 6:00 PM"></div>
+        </div>
+        <label for="cs_venue">Location</label>
+        <textarea id="cs_venue" name="cs_venue" placeholder="Venue / outdoor spot"></textarea>
+        <label for="cs_notes">Must-have shots (optional)</label>
+        <textarea id="cs_notes" name="cs_notes" placeholder="Anything you especially want"></textarea>
+      </div>
+
+      <div class="card">
+        <h2>5. Coverage notes</h2>
+        <label for="traditions">Traditions to cover</label>
+        <textarea id="traditions" name="traditions" placeholder="Sehra, rukhsati, milni, cake, etc."></textarea>
+        <label for="no_photo">No-photo zones / privacy</label>
+        <textarea id="no_photo" name="no_photo" placeholder="Anything we should avoid filming or photographing"></textarea>
+        <label for="drone">Drone allowed at venue?</label>
+        <select id="drone" name="drone">
+          <option value="">Select</option>
+          <option>Yes</option>
+          <option>No</option>
+          <option>Not sure</option>
+        </select>
+        <div class="row two">
+          <div>
+            <label for="bride_outfit">Bride outfit + colour (optional)</label>
+            <input id="bride_outfit" name="bride_outfit" placeholder="Designer / colour">
+          </div>
+          <div>
+            <label for="groom_outfit">Groom outfit + colour (optional)</label>
+            <input id="groom_outfit" name="groom_outfit" placeholder="Designer / colour">
+          </div>
+        </div>
+        <label for="decor">Décor / planner IG (optional)</label>
+        <input id="decor" name="decor" placeholder="@decorator or venue décor">
+        <label for="mua">Makeup artist (optional)</label>
+        <input id="mua" name="mua" placeholder="Name or @handle">
+      </div>
+
+      <div class="card">
+        <h2>6. Delivery & social</h2>
+        <label for="album_names">Names for album (exact spelling)</label>
+        <input id="album_names" name="album_names" placeholder="How names should appear">
+        <p class="hint" style="margin-top:4px">Social media consent *</p>
+        <div class="consent">
+          <label><input type="radio" name="social_consent" value="Can Post" required> <span><strong>Can Post</strong> — you may share our photos/videos</span></label>
+          <label><input type="radio" name="social_consent" value="Ask First"> <span><strong>Ask First</strong> — check with us before posting</span></label>
+          <label><input type="radio" name="social_consent" value="Cannot Post"> <span><strong>Cannot Post</strong> — do not publish</span></label>
+        </div>
+        <label for="couple_ig">Couple Instagram (optional)</label>
+        <input id="couple_ig" name="couple_ig" placeholder="@bride @groom">
+      </div>
+
+      <div class="card">
+        <h2>7. Day-of logistics</h2>
+        <label for="day_contact">Point person on the day *</label>
+        <input id="day_contact" name="day_contact" required placeholder="Name + WhatsApp">
+        <label for="guests">Approx. guests (optional)</label>
+        <input id="guests" name="guests" placeholder="e.g. 300">
+        <label for="access">Parking / access notes</label>
+        <textarea id="access" name="access" placeholder="Gate, parking, getting-ready room, etc."></textarea>
+        <label for="other_details">Anything else</label>
+        <textarea id="other_details" name="other_details" placeholder="Tell us what matters"></textarea>
+      </div>
+
+      <button type="submit">Submit details</button>
+      <p class="foot">Private form for booked clients only. We’ll use this to prepare coverage and update your event file.</p>
+    </form>
+  </div>
+
+<script src="/after-booking/config.js"></script>
+<script>
+(function(){
+  var form = document.getElementById('bfk-intake');
+  if(!form) return;
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var webhook = (window.BFK_SHEETS_WEBHOOK || '').trim();
+    if(!webhook){
+      alert('Setup incomplete: Sheets webhook not connected yet. Message Faisal / BFK team.');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    var fd = new FormData(form);
+    var data = {};
+    fd.forEach(function(v,k){
+      if(k === 'form-name' || k === 'bot-field') return;
+      if(data[k] !== undefined){
+        if(!Array.isArray(data[k])) data[k] = [data[k]];
+        data[k].push(v);
+      } else data[k] = v;
+    });
+    // checkboxes that are unchecked won't appear — that's fine
+    try{
+      var res = await fetch(webhook, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+      var text = await res.text();
+      var json = {};
+      try { json = JSON.parse(text); } catch(_){}
+      if(!res.ok || json.ok === false){
+        throw new Error((json && json.error) || ('HTTP '+res.status));
+      }
+      window.location.href = '/after-booking/thanks.html';
+    } catch(err){
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = 'Submit details';
+      alert('Could not save to the team sheet. Please WhatsApp us your details or try again.\n\n'+err.message);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
