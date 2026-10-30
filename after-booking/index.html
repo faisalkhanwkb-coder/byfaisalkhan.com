@@ -303,18 +303,17 @@ button:hover{opacity:.93}
     });
     // checkboxes that are unchecked won't appear — that's fine
     try{
-      var res = await fetch(webhook, {
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(data)
+      // Send as form fields (URL-encoded) so the deployed Apps Script reads them via e.parameter.
+      var params = new URLSearchParams();
+      Object.keys(data).forEach(function(k){
+        var v = data[k];
+        params.append(k, Array.isArray(v) ? v.join(', ') : v);
       });
-      var text = await res.text();
-      var json = {};
-      try { json = JSON.parse(text); } catch(_){}
-      if(!res.ok || json.ok === false){
-        throw new Error((json && json.error) || ('HTTP '+res.status));
-      }
+      await fetch(webhook, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: params
+      });
       window.location.href = '/after-booking/thanks.html';
     } catch(err){
       console.error(err);
