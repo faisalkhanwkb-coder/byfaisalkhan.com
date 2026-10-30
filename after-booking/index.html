@@ -274,8 +274,9 @@ button:hover{opacity:.93}
       b.hidden = !on;
       b.querySelectorAll('input,textarea,select').forEach(function(f){
         if(f.hasAttribute('required')) f.setAttribute('data-required','1');
-        if(on){ f.disabled = false; if(f.getAttribute('data-required')) f.required = true; }
-        else { f.disabled = true; f.required = false; }
+        f.disabled = false;
+        if(on){ if(f.getAttribute('data-required')) f.required = true; }
+        else { f.required = false; }
       });
     });
     if(noMsg) noMsg.hidden = any;
