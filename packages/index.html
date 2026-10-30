@@ -628,7 +628,7 @@ function render(){
     </div>`;
   if (rid === "pk"){
     h += `<div class="row2"><div class="field"><label class="lab" for="city">City</label>
-      <select id="city">${["Islamabad","Rawalpindi","Lahore","Peshawar","Abbottabad","Faisalabad","Gujranwala","Sialkot","Multan","Bahawalpur","Sargodha","Karachi","Hyderabad","Sukkur","Quetta","Gilgit","Swat","Mardan","Jhelum","Gujrat"].map(c=>`<option ${S.city===c?"selected":""}>${c}</option>`).join("")}<option value="other" ${S.city==="other"?"selected":""}>Another city</option></select></div>
+      <select id="city">${["Islamabad","Rawalpindi","Lahore","Peshawar","Abbottabad","Faisalabad","Gujranwala","Sialkot","Multan","Bahawalpur","Sargodha","Karachi","Hyderabad","Sukkur","Quetta","Gilgit","Swat","Mardan","Jhelum","Gujrat","Mirpur"].map(c=>`<option ${S.city===c?"selected":""}>${c}</option>`).join("")}<option value="other" ${S.city==="other"?"selected":""}>Another city</option></select></div>
       ${S.city==="other" ? `<div class="field"><label class="lab" for="place">Which city?</label><input type="text" id="place" value="${esc(S.place)}" placeholder="e.g. Peshawar"></div>` : ""}</div>`;
   } else if (r){
     h += `<div class="row2"><div class="field"><label class="lab" for="place">${r.cityLabel}</label><input type="text" id="place" value="${esc(S.place)}" placeholder="${r.cityHint}"></div></div>`;
