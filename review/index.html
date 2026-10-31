@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leave a Love Note | BFK by Faisal Khan</title>
+<meta name="description" content="Thirty seconds to tell us how it felt. Your words mean the world to BFK.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F2ECE5;--ink:#2F2B27;--mid:#6A6058;--line:rgba(47,43,39,.18);--gold:#A8742F;--card:#FBF8F4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.5}
+.wrap{max-width:520px;margin:0 auto;padding:28px 20px 60px}
+.back{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);text-decoration:none}
+.kicker{margin-top:26px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:40px;line-height:1.05;margin:6px 0 8px}
+.lead{color:var(--mid);font-weight:300;margin-bottom:24px}
+label,.lbl{display:block;font-size:13px;font-weight:500;color:var(--mid);margin:16px 0 6px}
+input,select,textarea{width:100%;font:16px Inter,sans-serif;color:var(--ink);padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+textarea{min-height:110px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stars{display:flex;gap:6px}
+.stars button{flex:1;font-size:34px;line-height:1;padding:8px 0;border:1px solid var(--line);border-radius:12px;background:var(--card);color:#d8cfc5;cursor:pointer}
+.stars button.on{color:var(--gold);border-color:var(--gold)}
+.hint{font-size:12px;color:var(--mid);margin-top:6px;min-height:16px}
+.file{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px dashed var(--line);border-radius:12px;background:var(--card);cursor:pointer;font-size:14px;color:var(--mid)}
+.file input{display:none}
+.consent{display:flex;gap:10px;align-items:flex-start;margin-top:18px;font-size:14px;color:var(--ink);font-weight:400}
+.consent input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--gold)}
+.btn{display:block;width:100%;margin-top:22px;padding:16px;border:0;border-radius:999px;background:var(--ink);color:var(--cream);font:500 15px Inter,sans-serif;letter-spacing:.04em;cursor:pointer;text-align:center;text-decoration:none}
+.btn:disabled{opacity:.5}
+.btn.google{background:#fff;color:var(--ink);border:1.5px solid var(--ink);font-size:17px;padding:20px}
+.err{color:#9b3b2b;font-size:13px;margin-top:10px;min-height:18px}
+.done{display:none;text-align:center;padding-top:30px}
+.done .heart{font-size:44px;color:var(--gold)}
+.done p{color:var(--mid);font-weight:300;margin:8px 0}
+.preview{background:#fff3d6;border:1px solid #e2c27f;color:#6b4d12;font-size:12px;padding:8px 12px;border-radius:10px;margin-top:14px;display:none}
+</style></head><body>
+<div class="wrap">
+  <a class="back" href="/">← BFK — By Faisal Khan</a>
+  <div class="preview" id="preview">Preview mode — reviews aren’t saved until the Apps Script URL is set in /reviews/config.js.</div>
+  <form id="f" novalidate>
+    <p class="kicker">Love Notes</p>
+    <h1>How did it feel?</h1>
+    <p class="lead">Thirty seconds, a few honest words. It truly means the world to us — and helps the next couple find us.</p>
+
+    <label for="couple">Your names</label>
+    <input id="couple" name="couple" required placeholder="Ayesha & Bilal" autocomplete="name">
+
+    <div class="row">
+      <div><label for="event">Event</label>
+        <select id="event" name="event" required>
+          <option value="">Choose…</option><option>Wedding</option><option>Baraat</option><option>Walima</option><option>Mehndi</option><option>Nikkah</option><option>Engagement</option><option>Pre-wedding shoot</option><option>Other</option>
+        </select></div>
+      <div><label for="month">Month</label><input id="month" name="month" type="month" required></div>
+    </div>
+
+    <span class="lbl">Your rating</span>
+    <div class="stars" id="stars" role="radiogroup" aria-label="Rating">
+      <button type="button" data-v="1" aria-label="1 star">★</button><button type="button" data-v="2" aria-label="2 stars">★</button><button type="button" data-v="3" aria-label="3 stars">★</button><button type="button" data-v="4" aria-label="4 stars">★</button><button type="button" data-v="5" aria-label="5 stars">★</button>
+    </div>
+    <div class="hint" id="starHint">Tap a star</div>
+
+    <label for="review">A few words</label>
+    <textarea id="review" name="review" required maxlength="600" placeholder="What will you remember most about working with us?"></textarea>
+
+    <span class="lbl">A favourite photo <span style="font-weight:300">(optional)</span></span>
+    <label class="file" style="margin:0"><input type="file" id="photo" accept="image/*"><span id="fileName">📷 Add a photo from your day</span></label>
+
+    <label class="consent"><input type="checkbox" id="consent"> <span>Yes, BFK may share our names, review and photo on byfaisalkhan.com.</span></label>
+
+    <button class="btn" id="go" type="submit">Send our love note</button>
+    <div class="err" id="err"></div>
+  </form>
+
+  <div class="done" id="doneHigh">
+    <div class="heart">♡</div>
+    <h1>Thank you, truly.</h1>
+    <p>Your words made our day. Would you share them on Google too? It takes a few seconds and helps other couples find BFK.</p>
+    <a class="btn google" id="googleBtn" href="#" target="_blank" rel="noopener">★ Also post it on Google</a>
+    <a class="btn" href="/" style="background:transparent;color:var(--mid)">Back to the site</a>
+  </div>
+  <div class="done" id="doneLow">
+    <div class="heart">♡</div>
+    <h1>Thank you for being honest.</h1>
+    <p>Your note comes straight to Faisal and stays private. We read every word, and we’d love the chance to make it right.</p>
+    <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">Message Faisal on WhatsApp</a>
+    <a class="btn" href="/" style="background:transparent;color:var(--mid)">Back to the site</a>
+  </div>
+</div>
+<script src="/reviews/config.js"></script>
+<script>
+(function(){
+  var END=window.BFK_REVIEWS_ENDPOINT||"", LIVE=/^https:\/\/script\.google/.test(END), stars=0, photo=null;
+  var $=function(id){return document.getElementById(id)};
+  if(!LIVE)$("preview").style.display="block";
+  var g=window.BFK_GOOGLE_REVIEW_URL||""; $("googleBtn").href=/^https?:/.test(g)?g:"#google-review-link-not-set";
+  $("waBtn").href="https://wa.me/"+(window.BFK_WHATSAPP||"923018976552");
+  var words=["","We’re sorry — tell us more","Not quite right","It was okay","Lovely!","Absolutely loved it!"];
+  [].forEach.call(document.querySelectorAll("#stars button"),function(b){b.onclick=function(){stars=+b.dataset.v;
+    [].forEach.call(document.querySelectorAll("#stars button"),function(x){x.classList.toggle("on",+x.dataset.v<=stars);x.setAttribute("aria-checked",+x.dataset.v===stars)});
+    $("starHint").textContent=words[stars]}});
+  $("photo").onchange=function(){var file=this.files[0];photo=null;if(!file)return;$("fileName").textContent="📷 "+file.name;
+    var img=new Image(),u=URL.createObjectURL(file);img.onload=function(){var m=1600,s=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement("canvas");
+      c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);photo=c.toDataURL("image/jpeg",.82);URL.revokeObjectURL(u)};img.src=u};
+  $("f").onsubmit=function(e){e.preventDefault();var err=$("err");err.textContent="";
+    var d={couple:$("couple").value.trim(),event:$("event").value,month:$("month").value,stars:stars,review:$("review").value.trim(),consent:$("consent").checked,photo:photo,ua:navigator.userAgent};
+    if(!d.couple||!d.event||!d.month||!d.review)return err.textContent="Just your names, event, month and a few words, please.";
+    if(!stars)return err.textContent="Tap a star rating to finish.";
+    $("go").disabled=true;$("go").textContent="Sending…";
+    var show=function(){$("f").style.display="none";$("preview").style.display="none";$(stars>=4?"doneHigh":"doneLow").style.display="block";window.scrollTo(0,0)};
+    if(!LIVE)return setTimeout(show,400);
+    fetch(END,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)})
+      .then(function(r){return r.json()}).then(function(j){if(j&&j.ok===false)throw 0;show()})
+      .catch(function(){$("go").disabled=false;$("go").textContent="Send our love note";err.textContent="Hmm, that didn’t go through. Please try again, or WhatsApp us on +92 301 8976552."})};
+})();
+</script>
+</body></html>
