@@ -8,7 +8,7 @@
 .ln-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
 .ln-body{padding:20px 22px 24px}
 .ln-stars{color:#A8742F;letter-spacing:3px;font-size:16px}
-.ln-quote{font-family:"Cormorant Garamond",Georgia,serif;font-size:21px;line-height:1.35;margin:10px 0 14px}
+.ln-quote{font-style:normal;font-family:"Cormorant Garamond",Georgia,serif;font-size:21px;line-height:1.35;margin:10px 0 14px}
 .ln-who{font-size:13px;font-weight:500}.ln-meta{font-size:12px;color:#6A6058}
 .ln-empty{text-align:center;color:#6A6058;background:#FBF8F4;border:1px dashed rgba(47,43,39,.25);border-radius:18px;padding:34px 20px}
 .ln-cta{text-align:center;margin-top:30px}
@@ -16,3 +16,6 @@
 .ln-btn.ghost{background:transparent;color:#2F2B27;border:1px solid #2F2B27;margin-left:8px}
 .ln-section{scroll-margin-top:96px;padding-top:96px}
 @media(max-width:640px){.ln-section{scroll-margin-top:72px;padding-top:72px}}
+.ln-mark{font-family:"Cormorant Garamond",Georgia,serif;font-size:54px;line-height:.6;color:#A8742F;height:22px}
+.ln-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.ln-btn.ghost{margin-left:0}
+.ln-btn.ln-leave{font-size:16px;padding:18px 34px;background:#A8742F;color:#fff}
