@@ -390,6 +390,17 @@ const PK = {
   ]
 };
 
+/* Photo booth add-on (Pakistan only) */
+const BOOTH = {
+  extraHour:5000, maxHours:6,
+  types:[
+    { id:"vintage", name:"Vintage Booth", tiers:[["200","200 high-quality photo prints",45000],["300","300 high-quality photo prints",55000],["unl","Unlimited photo prints",75000]] },
+    { id:"mirror", name:"Magic Mirror Booth", tiers:[["200","200 high-quality photo prints",60000],["300","300 high-quality photo prints",70000],["unl","Unlimited photo prints",90000]] }
+  ],
+  includes:["4 hours of rental time","A trained professional operator to assist guests & manage the booth","Elegant setup with on-site instant printing","Travel within Islamabad and Lahore included (out-of-city bookings may incur additional travel charges)"]
+};
+function boothSel(){ const b = S.booth||{}; const t = BOOTH.types.find(x=>x.id===b.type); const tier = t && t.tiers.find(x=>x[0]===b.tier); return { b, t, tier }; }
+
 /* request-only add-ons, used where we send a quote */
 const QUOTE_ADDONS = [
   { id:"photographer", label:"Extra photographer", price:null },
@@ -567,7 +578,7 @@ const TERMS = {
 const KEY = "bfk-builder-v4";
 let uid = Date.now();
 function blankEvent(name, date){ return { id:++uid, name:name||"", date:date||"", time:"night", pkg:null, hours:0, add:{}, note:"", choice:"" }; }
-function fresh(){ return { country:"", otherCountry:"", city:"Islamabad", place:"", cat:null, events:[], extras:{}, shoot:{}, shootAdd:{}, customNote:"", name:"" }; }
+function fresh(){ return { country:"", otherCountry:"", city:"Islamabad", place:"", cat:null, events:[], extras:{}, shoot:{}, shootAdd:{}, customNote:"", name:"", booth:{type:"",tier:"",hours:0} }; }
 let S = fresh();
 try { const s = localStorage.getItem(KEY); if (s) S = Object.assign(fresh(), JSON.parse(s)); } catch(e){}
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
@@ -673,6 +684,24 @@ function render(){
             a.type==="count" ? stepperHTML(S.shootAdd[a.id]||0, a.max, a.label, `data-shootadd="${a.id}"`) : switchHTML(!!S.shootAdd[a.id], a.label, `data-shootadd="${a.id}"`))).join("")}
       </div></div>
       ${rid==="pk" ? `<div class="notes"><p>${esc(PK.notes[0])}</p></div>` : ""}
+    </section>`;
+  }
+
+  /* photo booth (Pakistan only) */
+  if (rid === "pk" && S.cat){
+    const { b, t } = boothSel();
+    h += `<section class="step" id="photo-booth">${stepHead(n++, "Photo booth")}
+      <p class="hint">Vintage &amp; magic mirror. Add a booth to your event with on-site instant prints.</p>
+      <div class="pkgs">${BOOTH.types.map((x,i)=>`<article class="pkg"><span class="n">0${i+1}</span><h4>${esc(x.name)}</h4>
+        ${x.tiers.map(([,l,pr])=>`<div class="block">${esc(l)}<br><strong>${money(pr,"PKR")}</strong></div>`).join("")}</article>`).join("")}</div>
+      <div class="notes">${BOOTH.includes.map(x=>`<p>${esc(x)}</p>`).join("")}<p>Need more time? Extra hours are Rs 5,000/hour.</p></div>
+      <h3 class="sub">Add a photo booth</h3>
+      <div class="panel"><div class="field"><span class="lab">Booth</span><div class="opts">
+        <button type="button" class="opt" data-booth="" aria-pressed="${!t}"><span>No photo booth</span></button>
+        ${BOOTH.types.map(x=>`<button type="button" class="opt" data-booth="${x.id}" aria-pressed="${b.type===x.id}"><span>${esc(x.name)}</span><span class="p">from ${short(x.tiers[0][2],"PKR")}</span></button>`).join("")}</div></div>
+      ${t ? `<div class="field"><span class="lab">Prints</span><div class="opts">${t.tiers.map(([id,l,pr])=>`<button type="button" class="opt" data-boothtier="${id}" aria-pressed="${b.tier===id}"><span>${esc(l)}</span><span class="p">${short(pr,"PKR")}</span></button>`).join("")}</div></div>
+        <div class="addons">${addonRow("Extra booth hours","4 hours included", short(BOOTH.extraHour,"PKR")+"/hr", stepperHTML(b.hours||0, BOOTH.maxHours, "Extra booth hours", `data-boothhours="1"`))}</div>` : ""}
+      </div>
     </section>`;
   }
 
@@ -884,6 +913,16 @@ function calc(){
     }
   }
 
+  if (RID() === "pk"){
+    const { b, t, tier } = boothSel();
+    if (t && tier){
+      const g = { title:"Photo booth", lines:[] };
+      add(g, `${t.name}, ${tier[1]}`, tier[2], "4 hours, operator & instant printing. Travel within Islamabad and Lahore included (out-of-city bookings may incur additional travel charges)");
+      if (b.hours) add(g, `Extra booth hours × ${b.hours}`, b.hours * BOOTH.extraHour);
+      groups.push(g);
+    }
+  }
+
   if (groups.length){
     const id = RID();
     if (id === "pk" && pkCityLabel()){
@@ -976,7 +1015,7 @@ function resetForRegion(){
   const r = R();
   S.cat = r && r.cats.length === 1 ? r.cats[0].id : null;
   S.events = S.events.length ? S.events.map(e => blankEvent(e.name, e.date)) : [];
-  S.extras = {}; S.shoot = {}; S.shootAdd = {};
+  S.extras = {}; S.shoot = {}; S.shootAdd = {}; S.booth = {type:"",tier:"",hours:0};
   if (S.cat === "wedding" && !S.events.length) S.events.push(blankEvent());
 }
 function setCountry(c){
@@ -1005,6 +1044,9 @@ $("#steps").addEventListener("click", e => {
   else if (ev && d.count){ const a = r.addons.find(x => x.id === d.count);
     ev.add[a.id] = Math.max(0, Math.min(a.max, (ev.add[a.id]||0) + Number(d.d))); }
   else if (ev && d.hours){ ev.hours = Math.max(0, Math.min(6, ev.hours + Number(d.d))); }
+  else if (d.booth !== undefined){ S.booth = { type:d.booth, tier: d.booth && S.booth && S.booth.type===d.booth ? S.booth.tier : "", hours: d.booth ? (S.booth&&S.booth.hours)||0 : 0 }; }
+  else if (d.boothtier){ S.booth.tier = d.boothtier; }
+  else if (d.boothhours){ S.booth.hours = Math.max(0, Math.min(BOOTH.maxHours, (S.booth.hours||0) + Number(d.d))); }
   else if (d.extra){ S.extras[d.extra] = !S.extras[d.extra]; }
   else if (d.shoot){ const sh = r.shoots[S.cat];
     if (sh.multi) S.shoot[d.shoot] = !S.shoot[d.shoot];
