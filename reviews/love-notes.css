@@ -14,3 +14,5 @@
 .ln-cta{text-align:center;margin-top:30px}
 .ln-btn{display:inline-block;background:#2F2B27;color:#F2ECE5;text-decoration:none;padding:14px 26px;border-radius:999px;font-size:14px;letter-spacing:.04em}
 .ln-btn.ghost{background:transparent;color:#2F2B27;border:1px solid #2F2B27;margin-left:8px}
+.ln-section{scroll-margin-top:96px;padding-top:96px}
+@media(max-width:640px){.ln-section{scroll-margin-top:72px;padding-top:72px}}

@@ -77,13 +77,8 @@ textarea{min-height:110px;resize:vertical}
     <h1>Thank you, truly.</h1>
     <p>Your words made our day. Would you share them on Google too? It takes a few seconds and helps other couples find BFK.</p>
     <a class="btn google" id="googleBtn" href="#" target="_blank" rel="noopener">★ Also post it on Google</a>
-    <a class="btn" href="/" style="background:transparent;color:var(--mid)">Back to the site</a>
-  </div>
-  <div class="done" id="doneLow">
-    <div class="heart">♡</div>
-    <h1>Thank you for being honest.</h1>
-    <p>Your note comes straight to Faisal and stays private. We read every word, and we’d love the chance to make it right.</p>
-    <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">Message Faisal on WhatsApp</a>
+    <div id="lowExtra" style="display:none"><p style="margin-top:22px">And if anything fell short, Faisal would love to hear it directly — we’d love the chance to make it right.</p>
+    <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">Message Faisal on WhatsApp</a></div>
     <a class="btn" href="/" style="background:transparent;color:var(--mid)">Back to the site</a>
   </div>
 </div>
@@ -107,7 +102,7 @@ textarea{min-height:110px;resize:vertical}
     if(!d.couple||!d.event||!d.month||!d.review)return err.textContent="Just your names, event, month and a few words, please.";
     if(!stars)return err.textContent="Tap a star rating to finish.";
     $("go").disabled=true;$("go").textContent="Sending…";
-    var show=function(){$("f").style.display="none";$("preview").style.display="none";$(stars>=4?"doneHigh":"doneLow").style.display="block";window.scrollTo(0,0)};
+    var show=function(){$("f").style.display="none";$("preview").style.display="none";$("doneHigh").style.display="block";$("lowExtra").style.display=stars<=3?"block":"none";window.scrollTo(0,0)};
     if(!LIVE)return setTimeout(show,400);
     fetch(END,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)})
       .then(function(r){return r.json()}).then(function(j){if(j&&j.ok===false)throw 0;show()})

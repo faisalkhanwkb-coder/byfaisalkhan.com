@@ -7,8 +7,8 @@
     '<div class="ln-body"><div class="ln-stars" aria-label="'+r.stars+' stars">'+stars(r.stars)+'</div><p class="ln-quote">“'+esc(r.review)+'”</p>'+
     '<div class="ln-who">'+esc(r.couple)+'</div><div class="ln-meta">'+esc([r.event,r.month].filter(Boolean).join(" · "))+'</div></div></article>'}
   function mount(){
-    var el=document.getElementById("love-notes");
-    if(!el){var f=document.querySelector("footer");if(!f)return false;el=document.createElement("section");el.id="love-notes";f.parentNode.insertBefore(el,f)}
+    var el=document.getElementById("love-notes")||document.querySelector("#reviews[data-love-notes]");
+    if(!el){if(document.getElementById("root"))return false;var f=document.querySelector("footer");if(!f)return false;el=document.createElement("section");el.id="love-notes";f.parentNode.insertBefore(el,f)}
     if(el.dataset.done)return true;el.dataset.done=1;
     var limit=+(el.dataset.limit||6), wall=el.dataset.wall==="1";
     el.className="ln-section";
