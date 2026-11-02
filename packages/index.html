@@ -323,7 +323,7 @@ const PK = {
   },
   cats:[
     { id:"wedding", name:"Wedding", note:"Mehndi, Nikkah, Baraat, Valima" },
-    { id:"couple",  name:"Couple shoot", note:"Rs 50,000" },
+    { id:"couple",  name:"Couple shoot", note:"From Rs 20,000" },
     { id:"birthday",name:"Birthday", note:"From Rs 20,000" },
     { id:"casual",  name:"Casual shoot", note:"From Rs 10,000" }
   ],
@@ -375,8 +375,14 @@ const PK = {
   ],
   shoots:{
     couple:{ title:"Couple shoot", items:[
-      { id:"couple", name:"Couple Shoot", price:50000, lines:["1-hour signature couple shoot by Faisal","2–3 minute couple video","10-page square album"] } ],
-      addons:[ { id:"album", label:"Extra album", price:25000, type:"count", max:4 }, { id:"drone", label:"Drone coverage", price:20000 } ] },
+      { id:"team", name:"Team Couple Shoot", price:20000, lines:["1-hour couple shoot by our team","Photos only","40 edited photos"] },
+      { id:"faisal", name:"Signature Couple Shoot by Faisal", price:30000, lines:["1-hour couple shoot by Faisal","Photos only","50 edited photos"] } ],
+      addons:[ { id:"video", label:"Video", note:"2–3 min couple film + reel", price:10000 },
+        { id:"album", label:"Album", note:"10 square pages", price:10000 },
+        { id:"hour", label:"Extra hour", price:10000, type:"count", max:4, unit:"/hr" },
+        { id:"drone", label:"Drone", price:15000 },
+        { id:"outstation", label:"Outstation travel", note:"Per day, for shoots outside Islamabad, Rawalpindi and Lahore", price:25000, type:"count", max:7, unit:"/day", days:true } ],
+      note:"Both couple shoots are photos only and 1 hour by default. Add video, album, extra time or drone below. For shoots outside Islamabad, Rawalpindi and Lahore, add outstation travel (Rs 25,000 per day)." },
     birthday:{ title:"Birthday", multi:true, items:[
       { id:"photos", name:"Photos", price:20000, lines:["Unlimited raw photos","40–50 edited photos"] },
       { id:"video", name:"Video", price:20000, lines:["5-minute highlight"] } ] },
@@ -680,15 +686,15 @@ function render(){
         <div class="block">${it.lines.map(esc).join("<br>")}</div><div class="charge">${r.priceWord} ${short(it.price, r.cur)}</div></article>`).join("")}</div>
       <div class="panel" style="margin-top:6px"><div class="addons">
         ${sh.items.map(it => addonRow(it.name, "", short(it.price, r.cur), pick ? switchHTML(!!S.shoot[it.id], it.name, `data-shoot="${it.id}"`) : `<span class="ok-note" style="margin:0">Included</span>`)).join("")}
-        ${(sh.addons||[]).map(a => addonRow(a.label, a.note, short(a.price, r.cur),
+        ${(sh.addons||[]).map(a => addonRow(a.label, a.note, short(a.price, r.cur) + (a.unit||""),
             a.type==="count" ? stepperHTML(S.shootAdd[a.id]||0, a.max, a.label, `data-shootadd="${a.id}"`) : switchHTML(!!S.shootAdd[a.id], a.label, `data-shootadd="${a.id}"`))).join("")}
       </div></div>
-      ${rid==="pk" ? `<div class="notes"><p>${esc(PK.notes[0])}</p></div>` : ""}
+      ${rid==="pk" ? `<div class="notes"><p>${esc(sh.note || PK.notes[0])}</p></div>` : ""}
     </section>`;
   }
 
   /* photo booth (Pakistan only) */
-  if (rid === "pk" && S.cat){
+  if (rid === "pk" && S.cat && S.cat !== "couple"){
     const { b, t } = boothSel();
     h += `<section class="step" id="photo-booth">${stepHead(n++, "Photo booth")}
       <p class="hint">Vintage &amp; magic mirror. Add a booth to your event with on-site instant prints.</p>
@@ -908,12 +914,12 @@ function calc(){
     sh.items.forEach(it => { if (!(sh.multi || sh.items.length>1) || S.shoot[it.id]) add(g, it.name, it.price); });
     if (g.lines.length){
       (sh.addons||[]).forEach(a => { const v = S.shootAdd[a.id]; if (!v) return;
-        if (a.type === "count") add(g, `${a.label} × ${v}`, v * a.price); else add(g, a.label, a.price); });
+        if (a.type === "count") add(g, `${a.label} × ${v}${a.days ? (v>1?" days":" day") : ""}`, v * a.price); else add(g, a.label, a.price); });
       groups.push(g);
     }
   }
 
-  if (RID() === "pk"){
+  if (RID() === "pk" && S.cat !== "couple"){
     const { b, t, tier } = boothSel();
     if (t && tier){
       const g = { title:"Photo booth", lines:[] };
@@ -925,7 +931,7 @@ function calc(){
 
   if (groups.length){
     const id = RID();
-    if (id === "pk" && pkCityLabel()){
+    if (id === "pk" && pkCityLabel() && S.cat !== "couple"){
       const tr = calcPkTravel();
       if (tr && (tr.amount === null || tr.amount > 0)){
         const g = { title:"Travel", lines:[] };
@@ -964,7 +970,7 @@ function summaryText(c){
     else out.push("Please add the quoted items and send me the final total.");
   } else out.push("Please send me your quote.");
   if (faisalRequested()) out.push("Please confirm Faisal's availability for my date.");
-  if (RID() === "pk" && pkCityLabel() && !(isPkHomeCity(pkCityLabel()) || (isPkLahore(pkCityLabel()) && !faisalCoverageSelected()))) out.push("Note: accommodation for the team to be arranged by the family.");
+  if (RID() === "pk" && S.cat !== "couple" && pkCityLabel() && !(isPkHomeCity(pkCityLabel()) || (isPkLahore(pkCityLabel()) && !faisalCoverageSelected()))) out.push("Note: accommodation for the team to be arranged by the family.");
   return out.join("\n");
 }
 
@@ -1032,6 +1038,8 @@ $("#steps").addEventListener("click", e => {
 
   if (d.country){ setCountry(d.country); }
   else if (d.cat){ S.cat = d.cat; S.shoot = {}; S.shootAdd = {};
+    if (d.cat === "couple" && RID() === "pk"){ S.booth = {type:"",tier:"",hours:0}; S.extras = {}; S.customNote = "";
+      S.events.forEach(x => { x.add = {}; x.hours = 0; }); }
     if (d.cat === "wedding" && !S.events.length) S.events.push(blankEvent());
     const sh = r.shoots && r.shoots[d.cat]; if (sh && sh.multi) S.shoot.photos = true; }
   else if (d.act === "add-event"){ S.events.push(blankEvent()); }
