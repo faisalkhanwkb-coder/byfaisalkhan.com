@@ -36,6 +36,8 @@
     });
   }
   var f=$("review-form");
+  f.addEventListener("input",function(e){e.target.classList&&e.target.classList.remove("invalid")});
+  f.addEventListener("change",function(e){e.target.classList&&e.target.classList.remove("invalid")});
   f.addEventListener("submit",function(e){
     e.preventDefault();
     var err=[],name=f.name.value.trim(),type=f.event_type.value,text=f.text.value.trim(),date=f.event_date.value||null;
