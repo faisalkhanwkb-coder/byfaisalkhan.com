@@ -1,57 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leave a Review | BFK by Faisal Khan</title>
-<meta name="description" content="Share your experience working with BFK — By Faisal Khan Photography.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews | BFK by Faisal Khan</title>
+<meta name="description" content="Kind words from couples and families who trusted BFK — By Faisal Khan. Share your own review.">
+<link rel="icon" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root{--cream:#F2ECE5;--ink:#2F2B27;--mid:#6A6058;--brown:#4E4038;--line:rgba(47,43,39,.18);--gold:#A8742F}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.55;min-height:100vh}
-  .wrap{max-width:560px;margin:0 auto;padding:48px 22px 80px}
-  a.back{display:inline-block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);text-decoration:none;margin-bottom:28px}
-  a.back:hover{color:var(--gold)}
-  h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:42px;line-height:1.1;margin-bottom:10px}
-  .lead{color:var(--mid);margin-bottom:32px;font-weight:300}
-  label{display:block;font-size:13px;font-weight:500;margin:0 0 7px;color:var(--mid)}
-  input,textarea,select{width:100%;min-height:48px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#FBF8F4;font:inherit;margin-bottom:18px}
-  textarea{min-height:140px;resize:vertical}
-  button{width:100%;min-height:52px;border:0;border-radius:999px;background:var(--brown);color:var(--cream);font-weight:500;font-size:15px;cursor:pointer}
-  button:hover{opacity:.92}
-  .note{margin-top:18px;font-size:13px;color:var(--mid)}
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <a class="back" href="/#reviews">← Back to site</a>
-    <h1>Leave a review</h1>
-    <p class="lead">Tell other couples what it was like working with BFK. Reviews are moderated before they appear on the site.</p>
-    <form name="client-reviews" method="POST" action="/reviews/thanks.html">
-      <input type="hidden" name="form-name" value="client-reviews">
-      <p style="display:none"><label>Don’t fill this: <input name="bot-field"></label></p>
-      <label for="name">Your name</label>
-      <input id="name" name="name" type="text" required placeholder="e.g. Ayesha & Bilal">
-      <label for="event">Event / city</label>
-      <input id="event" name="event" type="text" required placeholder="e.g. Wedding — Lahore">
-      <label for="rating">Rating</label>
-      <select id="rating" name="rating" required>
-        <option value="5">5 — Excellent</option>
-        <option value="4">4 — Great</option>
-        <option value="3">3 — Good</option>
-        <option value="2">2 — Okay</option>
-        <option value="1">1 — Poor</option>
-      </select>
-      <label for="review">Your review</label>
-      <textarea id="review" name="review" required placeholder="What stood out for you?"></textarea>
-      <label for="email">Email (private — not shown on site)</label>
-      <input id="email" name="email" type="email" required placeholder="you@email.com">
-      <button type="submit">Submit review</button>
-      <p class="note">By submitting, you agree we may display your name, event, and review on byfaisalkhan.com.</p>
-    </form>
+<link rel="stylesheet" href="love-notes.css"><link rel="stylesheet" href="reviews.css">
+</head><body>
+<header class="top"><a href="../">← BFK — By Faisal Khan</a><nav><a href="../packages/">Packages</a><a href="../#weddings">Work</a></nav></header>
+<div id="demo-banner" class="demo" hidden>DEMO MODE — reviews are not saved yet (Supabase not connected).</div>
+<section class="ln-section" id="wall">
+  <div class="ln-inner">
+    <p class="ln-kicker">Kind words</p>
+    <h1 class="ln-title">Reviews</h1>
+    <p class="ln-sub">Notes from the couples and families we've had the joy of photographing.</p>
+    <div id="reviews-grid" class="ln-grid" aria-live="polite"></div>
+    <div class="ln-cta"><a class="ln-btn ln-leave" href="#write">Write a review</a></div>
   </div>
-</body>
-</html>
+</section>
+<section class="ln-section rv-write" id="write">
+  <div class="ln-inner rv-narrow">
+    <p class="ln-kicker">Share your story</p>
+    <h2 class="ln-title">Write a review</h2>
+    <p class="ln-sub">Thank you for trusting us. Reviews appear here once approved.</p>
+    <form id="review-form" novalidate>
+      <label>Your name<input name="name" maxlength="80" autocomplete="name" required></label>
+      <label>Event type<select name="event_type" required><option value="">Choose…</option><option>Wedding</option><option>Couple shoot</option><option>Birthday</option><option>Other</option></select></label>
+      <label>Event date <span class="opt">(optional)</span><input type="date" name="event_date"></label>
+      <fieldset class="rv-stars"><legend>Rating</legend>
+        <div class="rv-stars-row">
+          <input type="radio" id="s5" name="rating" value="5"><label for="s5" title="5 stars">★</label>
+          <input type="radio" id="s4" name="rating" value="4"><label for="s4" title="4 stars">★</label>
+          <input type="radio" id="s3" name="rating" value="3"><label for="s3" title="3 stars">★</label>
+          <input type="radio" id="s2" name="rating" value="2"><label for="s2" title="2 stars">★</label>
+          <input type="radio" id="s1" name="rating" value="1"><label for="s1" title="1 star">★</label>
+        </div></fieldset>
+      <label>Your review<textarea name="text" rows="5" maxlength="2000" required></textarea></label>
+      <label>A photo <span class="opt">(optional)</span><input type="file" name="photo" accept="image/*"></label>
+      <p id="form-error" class="rv-error" role="alert"></p>
+      <button class="ln-btn rv-submit" type="submit">Send review</button>
+    </form>
+    <div id="thanks" class="rv-thanks" hidden tabindex="-1">
+      <div class="ln-mark">“</div><h3>Thank you!</h3>
+      <p>Your review has been received and will appear here once approved.</p>
+      <p id="thanks-demo" hidden><strong>Demo mode:</strong> nothing was saved.</p>
+    </div>
+  </div>
+</section>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="reviews.js"></script>
+</body></html>
