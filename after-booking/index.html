@@ -281,6 +281,81 @@ button:hover{opacity:.93}
     });
     if(noMsg) noMsg.hidden = any;
   }
+  function filled(v){
+    return String(v == null ? '' : v).trim();
+  }
+  function formatDate(iso){
+    iso = filled(iso);
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var p = iso.split('-');
+    return Number(p[2]) + ' ' + months[Number(p[1]) - 1] + ' ' + p[0];
+  }
+  function eventLine(label, date, time, venue){
+    var bits = [];
+    if(filled(date)) bits.push(formatDate(date));
+    if(filled(time)) bits.push(filled(time));
+    if(filled(venue)) bits.push(filled(venue));
+    return bits.length ? (label + ' — ' + bits.join(', ')) : label;
+  }
+  function buildWhatsAppText(data){
+    var lines = [];
+    lines.push('Assalam o Alaikum! Sharing our event details:');
+    lines.push('');
+    if(filled(data.couple_name)) lines.push('Couple: ' + filled(data.couple_name));
+    if(filled(data.city)) lines.push('City: ' + filled(data.city));
+    if(filled(data.whatsapp)) lines.push('WhatsApp: ' + filled(data.whatsapp));
+    if(filled(data.package_ref)) lines.push('Package: ' + filled(data.package_ref));
+    if(filled(data.day_contact)) lines.push('Day-of contact: ' + filled(data.day_contact));
+    if(filled(data.point_name)) lines.push('Point person: ' + filled(data.point_name));
+    if(filled(data.secondary_contact)) lines.push('Secondary contact: ' + filled(data.secondary_contact));
+    var events = [
+      ['has_mehndi', 'Mehndi', 'mehndi_date', 'mehndi_time', 'mehndi_venue'],
+      ['has_nikkah', 'Nikkah', 'nikkah_date', 'nikkah_time', 'nikkah_venue'],
+      ['has_baraat', 'Baraat', 'baraat_date', 'baraat_time', 'baraat_venue'],
+      ['has_valima', 'Valima', 'valima_date', 'valima_time', 'valima_venue'],
+      ['has_engagement', 'Engagement', 'engagement_date', 'engagement_time', 'engagement_venue'],
+      ['has_home_reception', 'Home reception', 'home_reception_date', 'home_reception_time', 'home_reception_venue'],
+      ['has_couple_shoot', 'Couple shoot', 'cs_date', 'cs_time', 'cs_venue'],
+      ['has_other', filled(data.other_event_name) || 'Other', 'other_date', 'other_time', 'other_venue']
+    ];
+    var evs = [];
+    events.forEach(function(ev){
+      if(data[ev[0]] === 'yes') evs.push(eventLine(ev[1], data[ev[2]], data[ev[3]], data[ev[4]]));
+    });
+    if(evs.length){
+      lines.push('');
+      lines.push('Events:');
+      evs.forEach(function(line){ lines.push('• ' + line); });
+    }
+    var notes = [
+      ['Guests', 'guests'],
+      ['Instagram', 'couple_ig'],
+      ['Social posts', 'social_consent'],
+      ['Bride outfit', 'bride_outfit'],
+      ['Groom outfit', 'groom_outfit'],
+      ['MUA', 'mua'],
+      ['Decor', 'decor'],
+      ['Drone', 'drone'],
+      ['Traditions', 'traditions'],
+      ['No-photo', 'no_photo'],
+      ['Album names', 'album_names'],
+      ['Description', 'description'],
+      ['Access', 'access'],
+      ['Couple shoot notes', 'cs_notes'],
+      ['Other details', 'other_details']
+    ];
+    var noteLines = [];
+    notes.forEach(function(n){
+      if(filled(data[n[1]])) noteLines.push(n[0] + ': ' + filled(data[n[1]]));
+    });
+    if(noteLines.length){
+      lines.push('');
+      lines.push('Notes:');
+      noteLines.forEach(function(line){ lines.push('• ' + line); });
+    }
+    return lines.join('\n');
+  }
   form.querySelectorAll('.checks input[type="checkbox"]').forEach(function(cb){ cb.addEventListener('change', syncEvents); });
   syncEvents();
   form.addEventListener('submit', async function(e){
@@ -302,25 +377,35 @@ button:hover{opacity:.93}
         data[k].push(v);
       } else data[k] = v;
     });
-    // checkboxes that are unchecked won't appear — that's fine
+    // Webhook looks for has_cs; the form checkbox is has_couple_shoot.
+    if(data.has_couple_shoot === 'yes') data.has_cs = 'yes';
     try{
-      // Send as form fields (URL-encoded) so the deployed Apps Script reads them via e.parameter.
       var params = new URLSearchParams();
       Object.keys(data).forEach(function(k){
         var v = data[k];
         params.append(k, Array.isArray(v) ? v.join(', ') : v);
       });
-      await fetch(webhook, {
+      var res = await fetch(webhook, {
         method: 'POST',
-        mode: 'no-cors',
-        body: params
+        body: params,
+        redirect: 'follow'
       });
+      var body = '';
+      try { body = (await res.text()).trim(); } catch (readErr) { body = ''; }
+      if(body === 'busy'){
+        throw new Error('The sheet is busy. Please try again in a moment.');
+      }
+      if(!res.ok || body !== 'ok'){
+        throw new Error('Could not save to the team sheet.');
+      }
+      var waText = buildWhatsAppText(data);
+      try { sessionStorage.setItem('bfkAfterBookingWa', waText); } catch (sErr) {}
       window.location.href = '/after-booking/thanks.html';
     } catch(err){
       console.error(err);
       btn.disabled = false;
       btn.textContent = 'Submit details';
-      alert('Could not save to the team sheet. Please WhatsApp us your details or try again.\n\n'+err.message);
+      alert((err && err.message) ? err.message : 'Could not save to the team sheet. Please WhatsApp us your details or try again.');
     }
   });
 })();
