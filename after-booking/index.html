@@ -234,6 +234,7 @@ button:hover{opacity:.93}
           <label><input type="radio" name="social_consent" value="Can Post" required> <span><strong>Can Post</strong> — you may share our photos/videos</span></label>
           <label><input type="radio" name="social_consent" value="Ask First"> <span><strong>Ask First</strong> — check with us before posting</span></label>
           <label><input type="radio" name="social_consent" value="Cannot Post"> <span><strong>Cannot Post</strong> — do not publish</span></label>
+          <label><input type="radio" name="social_consent" value="Decide Later"> <span><strong>Decide Later</strong> — we haven’t decided yet whether you can share our photos/videos</span></label>
         </div>
         <label for="couple_ig">Couple Instagram (optional)</label>
         <input id="couple_ig" name="couple_ig" placeholder="@bride @groom">
@@ -291,24 +292,29 @@ button:hover{opacity:.93}
     var p = iso.split('-');
     return Number(p[2]) + ' ' + months[Number(p[1]) - 1] + ' ' + p[0];
   }
-  function eventLine(label, date, time, venue){
-    var bits = [];
-    if(filled(date)) bits.push(formatDate(date));
-    if(filled(time)) bits.push(filled(time));
-    if(filled(venue)) bits.push(filled(venue));
-    return bits.length ? (label + ' — ' + bits.join(', ')) : label;
+  function addLine(lines, label, value){
+    if(filled(value)) lines.push(label + ': ' + filled(value));
   }
   function buildWhatsAppText(data){
     var lines = [];
-    lines.push('Assalam o Alaikum! Sharing our event details:');
+    lines.push('Hi BFK,');
     lines.push('');
-    if(filled(data.couple_name)) lines.push('Couple: ' + filled(data.couple_name));
-    if(filled(data.city)) lines.push('City: ' + filled(data.city));
-    if(filled(data.whatsapp)) lines.push('WhatsApp: ' + filled(data.whatsapp));
-    if(filled(data.package_ref)) lines.push('Package: ' + filled(data.package_ref));
-    if(filled(data.day_contact)) lines.push('Day-of contact: ' + filled(data.day_contact));
-    if(filled(data.point_name)) lines.push('Point person: ' + filled(data.point_name));
-    if(filled(data.secondary_contact)) lines.push('Secondary contact: ' + filled(data.secondary_contact));
+    lines.push('Here are our details.');
+    var details = [];
+    addLine(details, 'Couple', data.couple_name);
+    addLine(details, 'City', data.city);
+    addLine(details, 'Package', data.package_ref);
+    addLine(details, 'WhatsApp', data.whatsapp);
+    addLine(details, 'Point person', data.point_name);
+    addLine(details, 'Secondary contact', data.secondary_contact);
+    addLine(details, 'Day-of contact', data.day_contact);
+    addLine(details, 'Guests', data.guests);
+    addLine(details, 'Parking / access', data.access);
+    if(details.length){
+      lines.push('');
+      lines.push('EVENT DETAILS');
+      details.forEach(function(line){ lines.push(line); });
+    }
     var events = [
       ['has_mehndi', 'Mehndi', 'mehndi_date', 'mehndi_time', 'mehndi_venue'],
       ['has_nikkah', 'Nikkah', 'nikkah_date', 'nikkah_time', 'nikkah_venue'],
@@ -319,40 +325,44 @@ button:hover{opacity:.93}
       ['has_couple_shoot', 'Couple shoot', 'cs_date', 'cs_time', 'cs_venue'],
       ['has_other', filled(data.other_event_name) || 'Other', 'other_date', 'other_time', 'other_venue']
     ];
-    var evs = [];
+    var evBlocks = [];
     events.forEach(function(ev){
-      if(data[ev[0]] === 'yes') evs.push(eventLine(ev[1], data[ev[2]], data[ev[3]], data[ev[4]]));
+      if(data[ev[0]] !== 'yes') return;
+      var block = ['• ' + ev[1]];
+      if(filled(data[ev[2]])) block.push('  Date: ' + formatDate(data[ev[2]]));
+      if(filled(data[ev[3]])) block.push('  Time: ' + filled(data[ev[3]]));
+      if(filled(data[ev[4]])) block.push('  Venue: ' + filled(data[ev[4]]));
+      evBlocks.push(block);
     });
-    if(evs.length){
+    if(evBlocks.length){
       lines.push('');
-      lines.push('Events:');
-      evs.forEach(function(line){ lines.push('• ' + line); });
+      lines.push('EVENTS');
+      evBlocks.forEach(function(block, i){
+        if(i) lines.push('');
+        block.forEach(function(line){ lines.push(line); });
+      });
     }
-    var notes = [
-      ['Guests', 'guests'],
-      ['Instagram', 'couple_ig'],
-      ['Social posts', 'social_consent'],
-      ['Bride outfit', 'bride_outfit'],
-      ['Groom outfit', 'groom_outfit'],
-      ['MUA', 'mua'],
-      ['Decor', 'decor'],
-      ['Drone', 'drone'],
-      ['Traditions', 'traditions'],
-      ['No-photo', 'no_photo'],
-      ['Album names', 'album_names'],
-      ['Description', 'description'],
-      ['Access', 'access'],
-      ['Couple shoot notes', 'cs_notes'],
-      ['Other details', 'other_details']
-    ];
-    var noteLines = [];
-    notes.forEach(function(n){
-      if(filled(data[n[1]])) noteLines.push(n[0] + ': ' + filled(data[n[1]]));
-    });
-    if(noteLines.length){
+    var creative = [];
+    addLine(creative, 'Instagram', data.couple_ig);
+    addLine(creative, 'Posting', data.social_consent);
+    addLine(creative, 'Album names', data.album_names);
+    addLine(creative, 'Bride outfit', data.bride_outfit);
+    addLine(creative, 'Groom outfit', data.groom_outfit);
+    addLine(creative, 'Makeup artist', data.mua);
+    addLine(creative, 'Decor / planner', data.decor);
+    addLine(creative, 'Traditions', data.traditions);
+    addLine(creative, 'Do not photograph', data.no_photo);
+    addLine(creative, 'Drone', data.drone);
+    addLine(creative, 'Couple shoot notes', data.cs_notes);
+    if(creative.length){
       lines.push('');
-      lines.push('Notes:');
-      noteLines.forEach(function(line){ lines.push('• ' + line); });
+      lines.push('CREATIVE');
+      creative.forEach(function(line){ lines.push(line); });
+    }
+    if(filled(data.other_details)){
+      lines.push('');
+      lines.push('OTHER');
+      lines.push(filled(data.other_details));
     }
     return lines.join('\n');
   }
