@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /after-booking/
 
 Sitemap: https://byfaisalkhan.com/sitemap.xml
