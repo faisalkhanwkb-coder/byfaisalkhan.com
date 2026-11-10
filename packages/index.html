@@ -400,8 +400,7 @@ const PK = {
 const BOOTH = {
   extraHour:5000, maxHours:6,
   types:[
-    { id:"vintage", name:"Vintage Booth", tiers:[["200","200 high-quality photo prints",45000],["300","300 high-quality photo prints",55000],["unl","Unlimited photo prints",75000]] },
-    { id:"mirror", name:"Magic Mirror Booth", tiers:[["200","200 high-quality photo prints",60000],["300","300 high-quality photo prints",70000],["unl","Unlimited photo prints",90000]] }
+    { id:"vintage", name:"Vintage Booth", tiers:[["200","200 high-quality photo prints",45000],["300","300 high-quality photo prints",55000],["unl","Unlimited photo prints",75000]] }
   ],
   includes:["4 hours of rental time","A trained professional operator to assist guests & manage the booth","Elegant setup with on-site instant printing","Travel within Islamabad and Lahore included (out-of-city bookings may incur additional travel charges)"]
 };
@@ -697,7 +696,7 @@ function render(){
   if (rid === "pk" && S.cat && S.cat !== "couple"){
     const { b, t } = boothSel();
     h += `<section class="step" id="photo-booth">${stepHead(n++, "Photo booth")}
-      <p class="hint">Vintage &amp; magic mirror. Add a booth to your event with on-site instant prints.</p>
+      <p class="hint">Vintage booth. Add it to your event with on-site instant prints.</p>
       <div class="pkgs">${BOOTH.types.map((x,i)=>`<article class="pkg"><span class="n">0${i+1}</span><h4>${esc(x.name)}</h4>
         ${x.tiers.map(([,l,pr])=>`<div class="block">${esc(l)}<br><strong>${money(pr,"PKR")}</strong></div>`).join("")}</article>`).join("")}</div>
       <div class="notes">${BOOTH.includes.map(x=>`<p>${esc(x)}</p>`).join("")}<p>Need more time? Extra hours are Rs 5,000/hour.</p></div>
