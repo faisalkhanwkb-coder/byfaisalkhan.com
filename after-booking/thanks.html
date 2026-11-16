@@ -21,7 +21,7 @@ p{color:#6A6058;max-width:40ch;margin:0 auto;font-weight:300;line-height:1.55}
     <div class="mark">bfk.</div>
     <h1>Received</h1>
     <p id="lead">Thank you — your details are with the BFK team. We’ll use them to prepare your day.</p>
-    <a id="wa-btn" class="wa" href="https://wa.me/923018976552" hidden>Send details on WhatsApp</a>
+    <a id="wa-btn" class="wa" href="https://wa.me/923308918913" hidden>Send details on WhatsApp</a>
     <p id="wa-note" class="note" hidden>If WhatsApp didn’t open, tap the button above. Your details are already saved.</p>
   </div>
   <script>
@@ -31,7 +31,7 @@ p{color:#6A6058;max-width:40ch;margin:0 auto;font-weight:300;line-height:1.55}
     var lead = document.getElementById('lead');
     var text = '';
     try { text = sessionStorage.getItem('bfkAfterBookingWa') || ''; } catch (e) { text = ''; }
-    var url = 'https://wa.me/923018976552';
+    var url = 'https://wa.me/923308918913';
     if(text){
       url += '?text=' + encodeURIComponent(text);
       lead.textContent = 'Thank you — your details are saved. Next, send a copy to Faisal on WhatsApp.';
