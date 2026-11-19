@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#4E4038">
+<meta name="robots" content="noindex,nofollow">
+<title>By Faisal Khan — Homepage preview (services)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Italiana&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --stone:#E6DED4; --paper:#F2ECE5; --field:#FBF8F4;
+  --ink:#2F2B27; --ink-soft:#6A6058; --cocoa:#4E4038;
+  --gold:#A8742F; --gold-soft:#C9A36E;
+  --line:rgba(47,43,39,.22); --line-soft:rgba(47,43,39,.12);
+  --radius:14px;
+  --display:'Italiana', Georgia, serif;
+  --serif:'Cormorant Garamond', Georgia, serif;
+  --body:'Jost', 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --stone:#2F2723; --paper:#3A312C; --field:#443A34;
+    --ink:#F2ECE5; --ink-soft:#CBBDB1; --cocoa:#231D1A;
+    --gold:#D9AE72; --gold-soft:#B98F5A;
+    --line:rgba(242,236,229,.26); --line-soft:rgba(242,236,229,.12);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--stone);color:var(--ink);font-family:var(--body);font-weight:300;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.preview-banner{background:var(--cocoa);color:#F2ECE5;text-align:center;padding:8px 14px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.strip{display:flex;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.16em;text-transform:uppercase;position:sticky;top:0;background:var(--stone);z-index:20}
+.strip a{text-decoration:none;opacity:.85}
+.strip a:hover{opacity:1;color:var(--gold)}
+.hero{padding:72px 22px 56px;text-align:center;border-bottom:1px solid var(--line)}
+.hero .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(36px,8vw,52px);letter-spacing:.14em;color:var(--gold);padding-left:.14em}
+.hero p{margin:18px auto 0;max-width:38ch;color:var(--ink-soft);font-size:16px}
+.jump{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:28px}
+.jump a{font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:8px 14px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft)}
+.jump a:hover{color:var(--ink);border-color:var(--ink)}
+.block{padding:48px 0 40px;border-bottom:1px solid var(--line-soft)}
+.block-inner{max-width:960px;margin:0 auto;padding:0 18px}
+.num{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--gold)}
+.block h2{font-family:var(--display);font-weight:400;font-size:28px;letter-spacing:.03em;margin:4px 0 10px}
+.lead{color:var(--ink-soft);font-size:16px;max-width:48ch;margin-bottom:22px}
+.wa{display:inline-flex;align-items:center;padding:10px 16px;min-height:42px;border-radius:999px;background:var(--ink);color:var(--stone);text-decoration:none;font-size:13px;letter-spacing:.04em}
+.wa:hover{background:var(--cocoa)}
+.service-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px 20px;max-width:520px}
+.service-card h3{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:8px}
+.service-card p{color:var(--ink-soft);font-size:15px;margin-bottom:16px}
+.credit{font-size:12px;color:var(--ink-soft);margin:8px 0 18px}
+.credit a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft)}
+.rail{display:flex;gap:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;padding:4px 18px 18px;margin:0 -18px}
+.rail::-webkit-scrollbar{height:6px}
+.rail::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+.vcard{flex:0 0 min(78vw,300px);scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.vcard img{width:100%;height:180px;object-fit:cover;background:var(--field);display:block}
+.vcard .body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.vcard h3{font-family:var(--display);font-weight:400;font-size:20px}
+.vcard .area{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.vcard p{font-size:14px;color:var(--ink-soft);flex:1}
+.vcard .meta{font-size:11px;color:var(--ink-soft)}
+.vcard .meta a{color:var(--gold);text-decoration:none}
+.vcard .wa{align-self:flex-start;margin-top:4px;font-size:12px;padding:9px 14px;min-height:38px}
+.brand{padding:22px 18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--field);max-width:560px}
+.brand .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.brand h3{font-family:var(--display);font-weight:400;font-size:24px;margin-bottom:8px}
+.brand p{color:var(--ink-soft);font-size:15px;margin-bottom:10px}
+.ph{padding:28px 18px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center;max-width:560px}
+.ph .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+.ph h3{font-family:var(--display);font-weight:400;font-size:22px;margin-bottom:8px}
+.ph p{color:var(--ink-soft);font-size:14px;max-width:36ch;margin:0 auto}
+.foot{padding:40px 18px 60px;text-align:center;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.foot a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="preview-banner">Homepage preview — not live · venues via Shadiyana</div>
+<nav class="strip">
+  <a href="#top">By Faisal Khan</a>
+  <span>
+    <a href="#venues">Venues</a>
+    ·
+    <a href="https://byfaisalkhan.com/packages/">Packages</a>
+  </span>
+</nav>
+
+<header class="hero" id="top">
+  <p class="eyebrow">Preview · full services</p>
+  <h1>BY FAISAL KHAN</h1>
+  <p>Photo and film, couple-shoot venues across Islamabad, décor with The Planners, day-of care — and a reel the same day.</p>
+  <nav class="jump" aria-label="Browse services">
+    <a href="#reel">Same-day reel</a>
+    <a href="#venues">Venues</a>
+    <a href="#planners">The Planners</a>
+    <a href="#day-of">Day-of</a>
+  </nav>
+</header>
+
+<section class="block" id="reel">
+  <div class="block-inner">
+    <div class="num">01</div>
+    <h2>Same-day reel</h2>
+    <p class="lead">A short highlight reel from the celebration, delivered before the day ends — so everyone can share it while they’re still together.</p>
+    <div class="service-card">
+      <h3>Enquire for your date</h3>
+      <p>No package menus here. Message with the event date and we’ll confirm what’s possible.</p>
+      <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20a%20same-day%20reel.">Enquire on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="venues">
+  <div class="block-inner">
+    <div class="num">02</div>
+    <h2>Couple-shoot venues</h2>
+    <p class="lead">Book your couple-shoot location through BFK. These Islamabad spots are listed on Shadiyana for photoshoots — swipe to browse, then enquire and we’ll arrange the booking with your shoot.</p>
+    <p class="credit">Location names, areas and photos from <a href="https://www.shadiyana.pk/" target="_blank" rel="noopener">Shadiyana</a>. We credit each listing; no prices shown.</p>
+  </div>
+  <div class="rail" aria-label="Islamabad couple-shoot venues">
+    <article class="vcard">
+      <img src="https://d10gxw1e8w7mt0.cloudfront.net/photographers/twin-cities/Aramesh-Photoshoot-Space/1793790594367-media.jpg" alt="Aramesh Photoshoot Space" loading="lazy" width="600" height="360">
+      <div class="body">
+        <div class="area">Bahria Enclave · F-10</div>
+        <h3>Aramesh Photoshoot Space</h3>
+        <p>Indoor and outdoor shoot space for weddings, couple sessions and creative work.</p>
+        <p class="meta">Via <a href="https://www.shadiyana.pk/photographers/aramesh-photoshoot-space" target="_blank" rel="noopener">Shadiyana</a></p>
+        <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20a%20couple%20shoot%20at%20Aramesh%20Photoshoot%20Space.">Enquire on WhatsApp</a>
+      </div>
+    </article>
+    <article class="vcard">
+      <img src="https://d10gxw1e8w7mt0.cloudfront.net/photographers/twin-cities/The-Art-Studio/1792160455517-media.jpg" alt="The Art Studio" loading="lazy" width="600" height="360">
+      <div class="body">
+        <div class="area">Chak Shahzad Farms</div>
+        <h3>The Art Studio</h3>
+        <p>A 10-kanal farm shoot location — space only, with your own photo and film team.</p>
+        <p class="meta">Via <a href="https://www.shadiyana.pk/photographers/the-art-studio" target="_blank" rel="noopener">Shadiyana</a></p>
+        <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20a%20couple%20shoot%20at%20The%20Art%20Studio.">Enquire on WhatsApp</a>
+      </div>
+    </article>
+    <article class="vcard">
+      <img src="https://d10gxw1e8w7mt0.cloudfront.net/wedding-venues/twin-cities/RS-Farmhouse/1789120770671-media.jpg" alt="RS Farmhouse" loading="lazy" width="600" height="360">
+      <div class="body">
+        <div class="area">Gulberg Greens</div>
+        <h3>RS Farmhouse</h3>
+        <p>Farmhouse, lawn and garden — listed for bridal and pre-wedding photoshoots.</p>
+        <p class="meta">Via <a href="https://www.shadiyana.pk/wedding-venues/rs-farmhouse" target="_blank" rel="noopener">Shadiyana</a></p>
+        <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20a%20couple%20shoot%20at%20RS%20Farmhouse.">Enquire on WhatsApp</a>
+      </div>
+    </article>
+    <article class="vcard">
+      <img src="https://d10gxw1e8w7mt0.cloudfront.net/wedding-venues/twin-cities/Hamzas-Farm/1788937551770-media.jpg" alt="Hamzas Farm" loading="lazy" width="600" height="360">
+      <div class="body">
+        <div class="area">Islamabad</div>
+        <h3>Hamzas Farm</h3>
+        <p>Gardens with sunset views, balcony and indoor rooms — bridal and shoot bookings.</p>
+        <p class="meta">Via <a href="https://www.shadiyana.pk/wedding-venues/hamzas-farm" target="_blank" rel="noopener">Shadiyana</a></p>
+        <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20a%20couple%20shoot%20at%20Hamzas%20Farm.">Enquire on WhatsApp</a>
+      </div>
+    </article>
+    <article class="vcard">
+      <img src="https://d10gxw1e8w7mt0.cloudfront.net/venues/twin-cities/qazi-fh/IMG-20240130-WA0023.webp" alt="Qazi Farm House" loading="lazy" width="600" height="360">
+      <div class="body">
+        <div class="area">Islamabad</div>
+        <h3>Qazi Farm House</h3>
+        <p>Outdoor farmhouse and lawn with indoor and outdoor photoshoot sessions listed.</p>
+        <p class="meta">Via <a href="https://www.shadiyana.pk/wedding-venues/qazi-farm-house" target="_blank" rel="noopener">Shadiyana</a></p>
+        <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20a%20couple%20shoot%20at%20Qazi%20Farm%20House.">Enquire on WhatsApp</a>
+      </div>
+    </article>
+  </div>
+  <div class="block-inner" style="margin-top:8px">
+    <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20booking%20a%20couple-shoot%20venue%20in%20Islamabad.">Enquire about another area</a>
+  </div>
+</section>
+
+<section class="block" id="planners">
+  <div class="block-inner">
+    <div class="num">03</div>
+    <h2>The Planners — décor</h2>
+    <p class="lead">Sister brand to BFK for wedding planning and décor in Islamabad and Rawalpindi. Soft open.</p>
+    <div class="brand">
+      <p class="tag">Sister brand · Soft open</p>
+      <h3>The Planners</h3>
+      <p>Moments, made by people who care.</p>
+      <p>Wedding planning and décor. Signature · Complete · Bespoke — scopes arrive with BFK before publish.</p>
+      <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20The%20Planners%20%E2%80%94%20décor%20and%20planning.">Enquire on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="day-of">
+  <div class="block-inner">
+    <div class="num">04</div>
+    <h2>Day-of management</h2>
+    <p class="lead">Calm coordination on the day with your guests, décor and photography teams. Full duty list waits on BFK.</p>
+    <div class="ph">
+      <p class="tag">Details soon</p>
+      <h3>What we cover on the day</h3>
+      <p>Clean placeholder until BFK’s confirmed list arrives.</p>
+    </div>
+    <p style="margin-top:18px">
+      <a class="wa" href="https://wa.me/923308918913?text=Hi%20BFK%2C%20I%27d%20like%20to%20enquire%20about%20day-of%20event%20management.">Enquire on WhatsApp</a>
+    </p>
+  </div>
+</section>
+
+<footer class="foot">
+  <a href="https://byfaisalkhan.com/">byfaisalkhan.com</a>
+  · preview only
+  · venue data <a href="https://www.shadiyana.pk/" target="_blank" rel="noopener">shadiyana.pk</a>
+</footer>
+</body>
+</html>
